@@ -76,6 +76,14 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-opentracing</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.logmanager</groupId>
+      <artifactId>log4j2-jboss-logmanager</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
