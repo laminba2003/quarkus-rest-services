@@ -1,11 +1,16 @@
 package com.quarkus.training.controller;
 
 import com.quarkus.training.domain.Country;
+import com.quarkus.training.domain.User;
 import com.quarkus.training.service.CountryService;
+import io.vertx.core.http.HttpServerResponse;
 import lombok.extern.slf4j.Slf4j;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/countries")
@@ -14,6 +19,9 @@ public class CountryController {
 
     @Inject
     CountryService countryService;
+
+    @Inject
+    User user;
 
     @GET
     public List<Country> getCountries() {
@@ -29,22 +37,26 @@ public class CountryController {
     }
 
     @POST
-    public Country createCountry(@Valid Country country) {
-        log.debug("creating country with values = {} and user : {}", country, null);
-        return countryService.createCountry(country);
+    @RolesAllowed("admin")
+    public Response createCountry(@Valid Country country, @Context HttpServerResponse response) {
+        log.debug("creating country with values = {} and user : {}", country, user.getEmail());
+        return Response.ok(countryService.createCountry(country))
+                .status(Response.Status.CREATED).build();
     }
 
     @Path("{name}")
     @PUT
+    @RolesAllowed("admin")
     public Country updateCountry(@PathParam("name") String name, @Valid Country country) {
-        log.debug("updating country with name = {}, values = {} and user : {}", name, country, null);
+        log.debug("updating country with name = {}, values = {} and user : {}", name, country, user.getEmail());
         return countryService.updateCountry(name, country);
     }
 
     @Path("{name}")
     @DELETE
+    @RolesAllowed("admin")
     public void deleteCountry(@PathParam("name") String name) {
-        log.debug("deleting country with name = {} and user : {}", name, null);
+        log.debug("deleting country with name = {} and user : {}", name, user.getEmail());
         countryService.deleteCountry(name);
     }
 

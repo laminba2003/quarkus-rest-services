@@ -6,9 +6,6 @@ import com.quarkus.training.exception.EntityNotFoundException;
 import com.quarkus.training.repository.CountryRepository;
 import com.quarkus.training.repository.PersonRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import javax.enterprise.context.ApplicationScoped;
@@ -24,7 +21,6 @@ public class PersonService {
         return personRepository.findAll(pageable).map(PersonEntity::toPerson);
     }
 
-    @Cacheable(key = "#id")
     public Person getPerson(Long id) {
         return personRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(String.format("person not found with id = %d", id)))
@@ -38,7 +34,6 @@ public class PersonService {
         return personRepository.save(PersonEntity.fromPerson(person)).toPerson();
     }
 
-    @CachePut(key = "#id")
     public Person updatePerson(Long id, Person person) {
         return personRepository.findById(id)
                 .map(entity -> {
@@ -49,7 +44,6 @@ public class PersonService {
                 }).orElseThrow(() -> new EntityNotFoundException(String.format("person not found with id = %d", id)));
     }
 
-    @CacheEvict(key = "#id")
     public void deletePerson(Long id) {
         if(personRepository.existsById(id)) {
             personRepository.deleteById(id);

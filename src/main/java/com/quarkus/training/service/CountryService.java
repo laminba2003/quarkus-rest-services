@@ -6,9 +6,6 @@ import com.quarkus.training.exception.EntityNotFoundException;
 import com.quarkus.training.exception.RequestException;
 import com.quarkus.training.repository.CountryRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -27,7 +24,6 @@ public class CountryService {
                 .collect(Collectors.toList());
     }
 
-    @Cacheable(key = "#name")
     public Country getCountry(String name) {
         return countryRepository.findByNameIgnoreCase(name).orElseThrow(() ->
                 new EntityNotFoundException(String.format("country not found with name = %s", name)))
@@ -43,7 +39,6 @@ public class CountryService {
         return countryRepository.save(CountryEntity.fromCountry(country)).toCountry();
     }
 
-    @CachePut(key = "#name")
     public Country updateCountry(String name, Country country) {
         return countryRepository.findByNameIgnoreCase(name)
                 .map(entity -> {
@@ -52,7 +47,6 @@ public class CountryService {
                 }).orElseThrow(() -> new EntityNotFoundException(String.format("country not found with name = %s", name)));
     }
 
-    @CacheEvict(key = "#name")
     public void deleteCountry(String name) {
         if(countryRepository.existsById(name)) {
             try {
