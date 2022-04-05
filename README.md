@@ -9,6 +9,6 @@ This is a simple Quarkus Rest Service built around these capabilities :
 - Exception Handling
 - Logging with log4j2
 - Oauth2 Security
-- Monitoring and Observability with Micrometer and Wavefront
+- Monitoring and Observability with Micrometer and Prometheus
 - Distributed  with OpenTracing
 - CI/CD with Github actions
