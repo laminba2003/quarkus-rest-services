@@ -2,22 +2,58 @@ package com.quarkus.training.service;
 
 import com.quarkus.training.domain.Person;
 import com.quarkus.training.entity.PersonEntity;
+import com.quarkus.training.exception.EntityNotFoundException;
+import com.quarkus.training.repository.CountryRepository;
 import com.quarkus.training.repository.PersonRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import javax.enterprise.context.ApplicationScoped;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @ApplicationScoped
 @AllArgsConstructor
 public class PersonService {
 
     private final PersonRepository personRepository;
+    private final CountryRepository countryRepository;
 
-    public List<Person> getPersons() {
-        return StreamSupport.stream(personRepository.findAll().spliterator(), false)
-                .map(PersonEntity::toPerson)
-                .collect(Collectors.toList());
+    public Page<Person> getPersons(Pageable pageable) {
+        return personRepository.findAll(pageable).map(PersonEntity::toPerson);
     }
+
+    @Cacheable(key = "#id")
+    public Person getPerson(Long id) {
+        return personRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(String.format("person not found with id = %d", id)))
+                .toPerson();
+    }
+
+    public Person createPerson(Person person) {
+        person.setId(null);
+        person.setCountry(countryRepository.findByNameIgnoreCase(person.getCountry().getName()).orElseThrow(() ->
+                new EntityNotFoundException(String.format("country not found with name = %s", person.getCountry().getName()))).toCountry());
+        return personRepository.save(PersonEntity.fromPerson(person)).toPerson();
+    }
+
+    @CachePut(key = "#id")
+    public Person updatePerson(Long id, Person person) {
+        return personRepository.findById(id)
+                .map(entity -> {
+                    person.setId(id);
+                    person.setCountry(countryRepository.findByNameIgnoreCase(person.getCountry().getName()).orElseThrow(() ->
+                            new EntityNotFoundException(String.format("country not found with name = %s", person.getCountry().getName()))).toCountry());
+                    return personRepository.save(PersonEntity.fromPerson(person)).toPerson();
+                }).orElseThrow(() -> new EntityNotFoundException(String.format("person not found with id = %d", id)));
+    }
+
+    @CacheEvict(key = "#id")
+    public void deletePerson(Long id) {
+        if(personRepository.existsById(id)) {
+            personRepository.deleteById(id);
+        }
+    }
+
 }
