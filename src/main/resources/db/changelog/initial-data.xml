@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="mamadou lamine ba" id="initial-data-countries">
+        <insert tableName="countries">
+            <column name="name" value="France"></column>
+            <column name="capital" value="Paris"></column>
+            <column name="population" value="12233344"></column>
+        </insert>
+        <insert tableName="countries">
+            <column name="name" value="Spain"></column>
+            <column name="capital" value="Madrid"></column>
+            <column name="population" value="12233344"></column>
+        </insert>
+        <insert tableName="countries">
+            <column name="name" value="Senegal"></column>
+            <column name="capital" value="Dakar"></column>
+            <column name="population" value="12233344"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet author="mamadou lamine ba" id="initial-data-persons">
+        <insert tableName="persons">
+            <column name="id" value="1"></column>
+            <column name="first_name" value="Mamadou Lamine"></column>
+            <column name="last_name" value="Ba"></column>
+            <column name="country_name" value="France"></column>
+        </insert>
+        <insert tableName="persons">
+            <column name="id" value="2"></column>
+            <column name="first_name" value="John"></column>
+            <column name="last_name" value="Doe"></column>
+            <column name="country_name" value="Senegal"></column>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
