@@ -6,8 +6,8 @@ entries:
     created: "2022-04-06T22:25:46.514701022Z"
     description: A Quarkus Helm chart for Kubernetes
     digest: 813f72eb17284e555fe7b25087778570055c016d1d8097751cc3d5bbab1cd642
-    home: https://github.com/laminba2003/quarkus-rest-services
-    icon: https://github.com/laminba2003/quarkus-rest-services/icon.svg
+    home: https://laminba2003.github.io/quarkus-rest-services
+    icon: https://laminba2003.github.io/quarkus-rest-services/icon.svg
     keywords:
     - quarkus
     - java
