@@ -3,6 +3,7 @@ package com.quarkus.training.controller;
 import com.quarkus.training.domain.Person;
 import com.quarkus.training.domain.User;
 import com.quarkus.training.service.PersonService;
+import io.quarkus.security.Authenticated;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/persons")
 @Slf4j
+@Authenticated
 public class PersonController {
 
     @Inject

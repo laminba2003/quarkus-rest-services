@@ -3,6 +3,7 @@ package com.quarkus.training.controller;
 import com.quarkus.training.domain.Country;
 import com.quarkus.training.domain.User;
 import com.quarkus.training.service.CountryService;
+import io.quarkus.security.Authenticated;
 import io.vertx.core.http.HttpServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import javax.annotation.security.RolesAllowed;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Path("/countries")
 @Slf4j
+@Authenticated
 public class CountryController {
 
     @Inject
