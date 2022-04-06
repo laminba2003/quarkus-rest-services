@@ -12,8 +12,8 @@ keywords:
   - keycloak
   - wavefront
   - opentracing
-home: https://github.com/laminba2003/quarkus-rest-services
-icon: https://github.com/laminba2003/quarkus-rest-services/icon.svg
+home: https://laminba2003.github.io/quarkus-rest-services
+icon: https://laminba2003.github.io/quarkus-rest-services/icon.svg
 sources:
   - https://github.com/laminba2003/quarkus-rest-services
 maintainers:
