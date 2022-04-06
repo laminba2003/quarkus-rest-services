@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "deployment.fullname" . }}
+data:
+  quarkus.datasource.db-kind :  mysql
+  quarkus.datasource.jdbc.url :  {{ .Values.api.configuration.datasource.url }}
+  quarkus.oidc.auth-server-url: {{ .Values.api.configuration.jwt.auth }}
+  quarkus.oidc.jwks-path: {{ .Values.api.configuration.jwt.jwk }}
