@@ -10,5 +10,5 @@ This is a simple Quarkus Rest Service built around these capabilities :
 - Logging with log4j2
 - Oauth2 Security with OIDC
 - Monitoring and Observability with Micrometer and Prometheus
-- Distributed  with OpenTracing
+- Distributed tracing with OpenTracing
 - CI/CD with Github actions
