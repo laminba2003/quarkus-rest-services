@@ -8,7 +8,7 @@ This chart bootstraps a [Quarkus REST Service](https://github.com/laminba2003/qu
 
 This simple Quarkus Rest Service is built around these capabilities :
 
-- Persistence with JPA and quarkus Data
+- Persistence with JPA and Spring Data
 - Migration with Liquibase
 - Exception Handling
 - Logging with log4j2
