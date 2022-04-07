@@ -4,13 +4,11 @@ import com.quarkus.training.domain.Country;
 import com.quarkus.training.domain.User;
 import com.quarkus.training.service.CountryService;
 import io.quarkus.security.Authenticated;
-import io.vertx.core.http.HttpServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -40,7 +38,7 @@ public class CountryController {
 
     @POST
     @RolesAllowed("admin")
-    public Response createCountry(@Valid Country country, @Context HttpServerResponse response) {
+    public Response createCountry(@Valid Country country) {
         log.debug("creating country with values = {} and user : {}", country, user.getEmail());
         return Response.ok(countryService.createCountry(country))
                 .status(Response.Status.CREATED).build();
@@ -57,9 +55,10 @@ public class CountryController {
     @Path("{name}")
     @DELETE
     @RolesAllowed("admin")
-    public void deleteCountry(@PathParam("name") String name) {
+    public Response deleteCountry(@PathParam("name") String name) {
         log.debug("deleting country with name = {} and user : {}", name, user.getEmail());
         countryService.deleteCountry(name);
+        return Response.ok().status(Response.Status.OK).build();
     }
 
 }

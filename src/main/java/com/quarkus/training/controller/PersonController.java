@@ -59,9 +59,10 @@ public class PersonController {
     @Path("{id}")
     @DELETE
     @RolesAllowed("admin")
-    public void deletePerson(@PathParam("id") Long id) {
+    public Response deletePerson(@PathParam("id") Long id) {
         log.debug("deleting person with id = {} and user : {}", id, user.getEmail());
         personService.deletePerson(id);
+        return Response.ok().status(Response.Status.OK).build();
     }
 
 }
