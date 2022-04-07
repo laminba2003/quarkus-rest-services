@@ -1,11 +1,11 @@
 package com.quarkus.training.exception;
 
-import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.time.LocalDateTime;
-import static javax.ws.rs.core.Response.Status.*;
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 @Provider
 public class APIExceptionHandler implements ExceptionMapper<Exception> {
@@ -17,14 +17,11 @@ public class APIExceptionHandler implements ExceptionMapper<Exception> {
         } else if (exception instanceof EntityNotFoundException) {
             return handleEntityNotFoundException((EntityNotFoundException) exception);
         }
-        else if (exception instanceof ConstraintViolationException) {
-            return handleConstraintViolationException((ConstraintViolationException) exception);
-        }
         else {
             APIException apiException = new APIException("internal server error",
                     INTERNAL_SERVER_ERROR, LocalDateTime.now());
             return Response.status(apiException.getStatus())
-                    .entity(exception).build();
+                    .entity(apiException).build();
         }
     }
 
@@ -42,10 +39,4 @@ public class APIExceptionHandler implements ExceptionMapper<Exception> {
                 .entity(exception).build();
     }
 
-    public Response handleConstraintViolationException(ConstraintViolationException e) {
-        APIException exception = new APIException("invalid input",
-                BAD_REQUEST, LocalDateTime.now());
-        return Response.status(exception.getStatus())
-                .entity(exception).build();
-    }
 }

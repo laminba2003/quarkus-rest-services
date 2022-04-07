@@ -16,7 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import javax.ws.rs.core.Response;
+import static javax.ws.rs.core.Response.Status.*;
 import java.util.Collections;
 import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
@@ -49,7 +49,7 @@ class PersonControllerTest extends BaseTestClass  {
                 .when().get()
                 .then()
                 .contentType(ContentType.JSON)
-                .statusCode(Response.Status.OK.getStatusCode())
+                .statusCode(OK.getStatusCode())
                 .body("content[0].id", equalTo((persons.get(0).getId().intValue())))
                 .body("content[0].firstName", equalTo(persons.get(0).getFirstName()))
                 .body("content[0].lastName", equalTo(persons.get(0).getLastName()))
@@ -68,7 +68,7 @@ class PersonControllerTest extends BaseTestClass  {
                 .when().get("{id}")
                 .then()
                 .contentType(ContentType.JSON)
-                .statusCode(Response.Status.OK.getStatusCode())
+                .statusCode(OK.getStatusCode())
                 .body("id", equalTo((person.getId().intValue())))
                 .body("firstName", equalTo(person.getFirstName()))
                 .body("lastName", equalTo(person.getLastName()))
@@ -88,7 +88,7 @@ class PersonControllerTest extends BaseTestClass  {
                 .when().post()
                 .then()
                 .contentType(ContentType.JSON)
-                .statusCode(Response.Status.CREATED.getStatusCode())
+                .statusCode(CREATED.getStatusCode())
                 .body("id", equalTo((person.getId().intValue())))
                 .body("firstName", equalTo(person.getFirstName()))
                 .body("lastName", equalTo(person.getLastName()))
@@ -109,7 +109,7 @@ class PersonControllerTest extends BaseTestClass  {
                 .when().put("{id}")
                 .then()
                 .contentType(ContentType.JSON)
-                .statusCode(Response.Status.OK.getStatusCode())
+                .statusCode(OK.getStatusCode())
                 .body("id", equalTo((person.getId().intValue())))
                 .body("firstName", equalTo(person.getFirstName()))
                 .body("lastName", equalTo(person.getLastName()))
@@ -126,7 +126,7 @@ class PersonControllerTest extends BaseTestClass  {
                 .pathParam("id", person.getId())
                 .when().delete("{id}")
                 .then()
-                .statusCode(Response.Status.OK.getStatusCode());
+                .statusCode(OK.getStatusCode());
     }
 
 }

@@ -12,7 +12,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import javax.ws.rs.core.Response;
+import static javax.ws.rs.core.Response.Status.*;
 import java.util.Collections;
 import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
@@ -41,7 +41,7 @@ class CountryControllerTest extends BaseTestClass {
                 .when().get()
                 .then()
                 .contentType(ContentType.JSON)
-                .statusCode(Response.Status.OK.getStatusCode())
+                .statusCode(OK.getStatusCode())
                 .body("name[0]", equalTo(countries.get(0).getName()))
                 .body("capital[0]", equalTo(countries.get(0).getCapital()))
                 .body("population[0]", equalTo(countries.get(0).getPopulation()));
@@ -57,7 +57,7 @@ class CountryControllerTest extends BaseTestClass {
                 .when().get("{name}")
                 .then()
                 .contentType(ContentType.JSON)
-                .statusCode(Response.Status.OK.getStatusCode())
+                .statusCode(OK.getStatusCode())
                 .body("name", equalTo(country.getName()))
                 .body("capital", equalTo(country.getCapital()))
                 .body("population", equalTo(country.getPopulation()));
@@ -74,7 +74,7 @@ class CountryControllerTest extends BaseTestClass {
                 .when().post()
                 .then()
                 .contentType(ContentType.JSON)
-                .statusCode(Response.Status.CREATED.getStatusCode())
+                .statusCode(CREATED.getStatusCode())
                 .body("name", equalTo(country.getName()))
                 .body("capital", equalTo(country.getCapital()))
                 .body("population", equalTo(country.getPopulation()));
@@ -92,7 +92,7 @@ class CountryControllerTest extends BaseTestClass {
                 .when().put("{name}")
                 .then()
                 .contentType(ContentType.JSON)
-                .statusCode(Response.Status.OK.getStatusCode())
+                .statusCode(OK.getStatusCode())
                 .body("name", equalTo(country.getName()))
                 .body("capital", equalTo(country.getCapital()))
                 .body("population", equalTo(country.getPopulation()));
@@ -106,6 +106,6 @@ class CountryControllerTest extends BaseTestClass {
                 .pathParam("name", "France")
                 .when().delete("{name}")
                 .then()
-                .statusCode(Response.Status.OK.getStatusCode());
+                .statusCode(OK.getStatusCode());
     }
 }
