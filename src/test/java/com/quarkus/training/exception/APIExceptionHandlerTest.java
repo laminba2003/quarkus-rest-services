@@ -11,6 +11,7 @@ import io.quarkus.test.oidc.server.OidcWiremockTestResource;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
 import javax.validation.ConstraintViolationException;
+import javax.ws.rs.NotFoundException;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -62,6 +63,18 @@ class APIExceptionHandlerTest extends BaseTestClass {
                 .then()
                 .statusCode(BAD_REQUEST.getStatusCode())
                 .body("message", equalTo("invalid input") );
+    }
+
+    @Test
+    public void testNotFoundException() {
+        NotFoundException exception = new NotFoundException();
+        when(personService.getPerson(any()))
+                .thenThrow(exception);
+        RestAssured.given().auth().oauth2(getToken())
+                .when().get("ppppp")
+                .then()
+                .statusCode(NOT_FOUND.getStatusCode())
+                .body("message", equalTo(NOT_FOUND.getReasonPhrase()) );
     }
 
     @Test
