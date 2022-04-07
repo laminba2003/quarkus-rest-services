@@ -1,3 +1,29 @@
 apiVersion: v1
-entries: {}
-generated: "2022-04-06T22:37:14.005944737Z"
+entries:
+  quarkus-rest:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-04-07T22:14:39.448501613Z"
+    description: A Quarkus Helm chart for Kubernetes
+    digest: 0a477f9bf36b5fe995a47e4daad53493584ab73197be8c9ebd4c72bdab81af75
+    home: https://laminba2003.github.io/quarkus-rest-services
+    icon: https://laminba2003.github.io/quarkus-rest-services/icon.svg
+    keywords:
+    - quarkus
+    - java
+    - rest
+    - api
+    - keycloak
+    - wavefront
+    - opentracing
+    maintainers:
+    - email: laminba2003@gmail.com
+      name: mamadou lamine ba
+    name: quarkus-rest
+    sources:
+    - https://github.com/laminba2003/quarkus-rest-services
+    type: application
+    urls:
+    - https://github.com/laminba2003/quarkus-rest-services/releases/download/quarkus-rest-0.1.0/quarkus-rest-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-04-07T22:14:39.448753418Z"
