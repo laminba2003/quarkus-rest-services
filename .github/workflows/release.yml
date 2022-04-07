@@ -3,7 +3,7 @@ name: Release Charts
 on:
   workflow_run:
     workflows: ["build"]
-    branches: [master]
+    branches: [release]
     types:
       - completed
 
