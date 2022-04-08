@@ -1,0 +1,290 @@
+= Service Documentation
+Mamadou Lamine Ba <https://github.com/laminba2003[@laminba2003]>
+:revnumber: {project-version}
+:example-caption!:
+ifndef::imagesdir[:imagesdir: images]
+ifndef::sourcedir[:sourcedir: ../../main/java]
+ifndef::snippets[:snippets: ../../../target/snippets]
+:description: This developer guide describes the design and implementation of a Quarkus REST service.
+:keywords: Java, Quarkus, reference, learn, how to
+:doctype: book
+:page-layout!:
+:toc: left
+:nofooter:
+:sectanchors:
+:sectlinks:
+:sectnums:
+:icons: font
+:source-highlighter: highlightjs
+:highlightjs-languages: groovy
+:source-language: asciidoc
+:docinfo: shared-head
+
+
+== Architecture
+
+[plantuml, Package-diagram, png]
+----
+
+package com.quarkus.training.domain {
+    class Country
+    class Person
+    class User
+}
+
+package com.quarkus.training.entity {
+    class CountryEntity
+    class PersonEntity
+}
+
+package com.quarkus.training.repository {
+    interface CountryRepository
+    interface PersonRepository
+}
+
+package com.quarkus.training.exception {
+    class APIException
+    class APIExceptionHandler
+    class ConstraintViolationExceptionHandler
+    class EntityNotFoundException
+    class NotFoundExceptionHandler
+    class RequestException
+}
+
+package com.quarkus.training.service {
+    class CountryService
+    class PersonService
+}
+
+package com.quarkus.training.controller {
+    class CountryController
+    class PersonController
+}
+
+com.quarkus.training.entity ..> com.quarkus.training.domain
+com.quarkus.training.repository ..> com.quarkus.training.entity
+com.quarkus.training.service ..> com.quarkus.training.repository
+com.quarkus.training.service ..> com.quarkus.training.exception
+com.quarkus.training.controller ..> com.quarkus.training.service
+
+----
+
+
+== Country Controller
+
+[plantuml, GetCountries-class-diagram, png]
+----
+class Country {
+  + name: String
+  + capital: String
+  + population: Integer
+}
+
+class CountryEntity <<Entity>> {
+  + name: String
+  + capital: String
+  + population: Integer
+  + Country toCountry()
+}
+
+interface CountryRepository<CountryEntity, String> <<Repository>> {
+}
+
+interface CrudRepository<T,ID> {
+}
+
+class CountryService <<Service>> {
+}
+
+class CountryController <<Controller>> {
+}
+
+
+CountryEntity ..> Country
+CountryRepository ..> CountryEntity
+CrudRepository <|-- CountryRepository
+CountryService --> CountryRepository
+CountryController --> CountryService
+
+----
+
+=== GetCountries
+
+[plantuml, GetCountries-sequence-diagram, png]
+----
+
+participant client
+participant countryController
+participant countryService
+participant countryRepository
+participant database
+
+client -> countryController: GET /countries
+countryController -> countryService: invokes the getCountries method of the service
+countryService -> countryRepository: invokes the findAll method of the repository
+countryRepository -> database: hits the database to get the list of countries
+countryRepository <-- database: return the records
+countryService <-- countryRepository: return the Entities
+countryService -> countryService: converts the Entities to DTOs
+countryController <-- countryService: return the list of countries
+countryController -> client: return response as JSON
+
+----
+
+.request
+include::{snippets}/countries/getCountries/curl-request.adoc[]
+
+.response
+include::{snippets}/countries/getCountries/http-response.adoc[]
+
+
+=== GetCountry
+
+.request
+include::{snippets}/countries/getCountry/curl-request.adoc[]
+
+.response
+include::{snippets}/countries/getCountry/http-response.adoc[]
+
+
+=== CreateCountry
+
+.request
+include::{snippets}/countries/createCountry/curl-request.adoc[]
+
+.response
+include::{snippets}/countries/createCountry/http-response.adoc[]
+
+=== UpdateCountry
+
+
+.request
+include::{snippets}/countries/updateCountry/curl-request.adoc[]
+
+.response
+include::{snippets}/countries/updateCountry/http-response.adoc[]
+
+
+=== DeleteCountry
+
+.request
+include::{snippets}/countries/deleteCountry/curl-request.adoc[]
+
+.response
+include::{snippets}/countries/deleteCountry/http-response.adoc[]
+
+== Person Controller
+
+[plantuml, GetPersons-class-diagram, png]
+----
+class Person {
+  + Long id
+  + String firstName
+  + String lastName
+  + Country country
+}
+
+class Country {
+}
+
+class PersonEntity <<Entity>> {
+  + Long id
+  + String firstName
+  + String lastName
+  + CountryEntry country
+  + Person toPerson()
+}
+
+class CountryEntity <<Entity>> {
+  + Country toCountry()
+}
+
+
+interface PersonRepository<PersonEntity, Long> <<Repository>> {
+}
+
+interface PagingAndSortingRepository<T, ID> {
+}
+
+class PersonService <<Service>> {
+}
+
+class PersonController <<Controller>> {
+}
+
+
+PersonEntity ..> Person
+PersonEntity -> CountryEntity
+CountryEntity ..> Country
+Person -> Country
+PersonRepository ..> PersonEntity
+PagingAndSortingRepository <|-- PersonRepository
+PersonService --> PersonRepository
+PersonController --> PersonService
+
+----
+
+=== GetPersons
+
+[plantuml, GetPersons-sequence-diagram, png]
+----
+
+participant client
+participant personController
+participant personService
+participant personRepository
+participant database
+
+client -> personController: GET /persons
+personController -> personService: invokes the getPersons method of the service
+personService -> personRepository: invokes the findAll method of the repository
+personRepository -> database: hits the database to get the list of persons
+personRepository <-- database: return the records
+personService <-- personRepository: return the Entities
+personService -> personService: converts the Entities to DTOs
+personController <-- personService: return the list of persons
+personController -> client: return response as JSON
+
+----
+
+.request
+include::{snippets}/persons/getPersons/curl-request.adoc[]
+
+.response
+include::{snippets}/persons/getPersons/http-response.adoc[]
+
+
+=== GetPerson
+
+.request
+include::{snippets}/persons/getPerson/curl-request.adoc[]
+
+.response
+include::{snippets}/persons/getPerson/http-response.adoc[]
+
+
+=== CreatePerson
+
+.request
+include::{snippets}/persons/createPerson/curl-request.adoc[]
+
+.response
+include::{snippets}/persons/createPerson/http-response.adoc[]
+
+
+=== UpdatePerson
+
+.request
+include::{snippets}/persons/updatePerson/curl-request.adoc[]
+
+.response
+include::{snippets}/persons/updatePerson/http-response.adoc[]
+
+
+=== DeletePerson
+
+.request
+include::{snippets}/persons/deletePerson/curl-request.adoc[]
+
+.response
+include::{snippets}/persons/deletePerson/http-response.adoc[]
