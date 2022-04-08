@@ -65,7 +65,7 @@ autoscaling:
 api:
   configuration:
     datasource:
-      url: "jdbc:mysql://mysql/spring_training?enabledTLSProtocols=TLSv1.2"
+      url: "jdbc:mysql://mysql/quarkus_training?enabledTLSProtocols=TLSv1.2"
       username: cm9vdA==
       password: cGFzc2Vy
     jwt:
