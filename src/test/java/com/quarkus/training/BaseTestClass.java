@@ -18,10 +18,13 @@ public abstract class BaseTestClass {
 
     protected String getToken() {
         Set<String> roles = Collections.singleton("admin");
-        return Jwt.preferredUserName("user")
+        return Jwt.preferredUserName("john")
                 .issuer("https://server.example.com")
                 .audience("https://service.example.com")
                 .claim("roles", roles)
+                .claim("email", "johndoe@example.com")
+                .claim("given_name", "john")
+                .claim("family_name", "doe")
                 .sign();
     }
 
