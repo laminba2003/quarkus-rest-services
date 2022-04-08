@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "deployment.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "deployment.labels" . | nindent 8 }}
+  endpoints:
+    - port: http
+      path: "/q/metrics"
