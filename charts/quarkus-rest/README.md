@@ -15,6 +15,7 @@ This simple Quarkus Rest Service is built around these capabilities :
 - Oauth2 Security with OIDC
 - Monitoring and Observability with Micrometer and Prometheus
 - Distributed tracing with OpenTracing
+- Health Check with SmallRye Health
 
 
 ## Installing the Chart

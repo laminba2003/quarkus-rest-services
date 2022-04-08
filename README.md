@@ -11,6 +11,7 @@ This is a simple Quarkus Rest Service built around these capabilities :
 - Oauth2 Security with OIDC
 - Monitoring and Observability with Micrometer and Prometheus
 - Distributed tracing with OpenTracing
+- Health with SmallRye Health
 - Documentation with Spring REST Docs and OpenAPI 
 - CI/CD with Github actions
 
