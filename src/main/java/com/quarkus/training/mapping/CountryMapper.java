@@ -4,7 +4,7 @@ import com.quarkus.training.domain.Country;
 import com.quarkus.training.entity.CountryEntity;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi")
+@Mapper
 public interface CountryMapper {
 
     Country toCountry(CountryEntity countryEntity);

@@ -187,6 +187,7 @@
           </annotationProcessorPaths>
           <compilerArgs>
             <arg>-parameters</arg>
+            <arg>-Amapstruct.defaultComponentModel=cdi</arg>
           </compilerArgs>
         </configuration>
       </plugin>
