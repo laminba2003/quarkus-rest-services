@@ -20,14 +20,14 @@ public class PersonService {
     CountryRepository countryRepository;
 
     @Inject
-    PersonMapper mapper;
+    PersonMapper personMapper;
 
     public Page<Person> getPersons(Pageable pageable) {
-        return personRepository.findAll(pageable).map(mapper::toPerson);
+        return personRepository.findAll(pageable).map(personMapper::toPerson);
     }
 
     public Person getPerson(Long id) {
-        return mapper.toPerson(personRepository.findById(id).orElseThrow(() ->
+        return personMapper.toPerson(personRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(String.format("person not found with id = %d", id))));
     }
 
@@ -35,7 +35,7 @@ public class PersonService {
         countryRepository.findByNameIgnoreCase(person.getCountry().getName()).orElseThrow(() ->
                 new EntityNotFoundException(String.format("country not found with name = %s", person.getCountry().getName())));
         person.setId(null);
-        return mapper.toPerson(personRepository.save(mapper.fromPerson(person)));
+        return personMapper.toPerson(personRepository.save(personMapper.fromPerson(person)));
     }
 
     public Person updatePerson(Long id, Person person) {
@@ -44,7 +44,7 @@ public class PersonService {
                     countryRepository.findByNameIgnoreCase(person.getCountry().getName()).orElseThrow(() ->
                             new EntityNotFoundException(String.format("country not found with name = %s", person.getCountry().getName())));
                     person.setId(id);
-                    return mapper.toPerson(personRepository.save(mapper.fromPerson(person)));
+                    return personMapper.toPerson(personRepository.save(personMapper.fromPerson(person)));
                 }).orElseThrow(() -> new EntityNotFoundException(String.format("person not found with id = %d", id)));
     }
 

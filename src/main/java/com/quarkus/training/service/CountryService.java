@@ -19,16 +19,16 @@ public class CountryService {
     CountryRepository countryRepository;
 
     @Inject
-    CountryMapper mapper;
+    CountryMapper countryMapper;
 
     public List<Country> getCountries() {
         return StreamSupport.stream(countryRepository.findAll().spliterator(), false)
-                .map(mapper::toCountry)
+                .map(countryMapper::toCountry)
                 .collect(Collectors.toList());
     }
 
     public Country getCountry(String name) {
-        return mapper.toCountry(countryRepository.findByNameIgnoreCase(name).orElseThrow(() ->
+        return countryMapper.toCountry(countryRepository.findByNameIgnoreCase(name).orElseThrow(() ->
                 new EntityNotFoundException(String.format("country not found with name = %s", name)))
         );
     }
@@ -39,14 +39,14 @@ public class CountryService {
                     throw new RequestException(String.format("the country with name %s is already created", entity.getName()),
                             Response.Status.CONFLICT);
                 });
-        return mapper.toCountry(countryRepository.save(mapper.fromCountry(country)));
+        return countryMapper.toCountry(countryRepository.save(countryMapper.fromCountry(country)));
     }
 
     public Country updateCountry(String name, Country country) {
         return countryRepository.findByNameIgnoreCase(name)
                 .map(entity -> {
                     country.setName(name);
-                    return mapper.toCountry(countryRepository.save(mapper.fromCountry(country)));
+                    return countryMapper.toCountry(countryRepository.save(countryMapper.fromCountry(country)));
                 }).orElseThrow(() -> new EntityNotFoundException(String.format("country not found with name = %s", name)));
     }
 
