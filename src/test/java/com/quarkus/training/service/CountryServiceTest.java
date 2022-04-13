@@ -5,6 +5,7 @@ import com.quarkus.training.domain.Country;
 import com.quarkus.training.entity.CountryEntity;
 import com.quarkus.training.exception.EntityNotFoundException;
 import com.quarkus.training.exception.RequestException;
+import com.quarkus.training.mapping.CountryMapper;
 import com.quarkus.training.repository.CountryRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
@@ -29,12 +30,15 @@ class CountryServiceTest extends BaseTestClass {
 
     @InjectMock
     CountryRepository countryRepository;
+    
+    @Inject
+    CountryMapper mapper;
 
     @Test
     void testGetCountries() {
         List<Country> countries = Collections.singletonList(getCountry());
         given(countryRepository.findAll()).
-                willReturn(countries.stream().map(CountryEntity::fromCountry).collect(Collectors.toList()));
+                willReturn(countries.stream().map(mapper::fromCountry).collect(Collectors.toList()));
         List<Country> result = countryService.getCountries();
         verify(countryRepository).findAll();
         assertThat(result.size()).isEqualTo(countries.size());
@@ -47,7 +51,7 @@ class CountryServiceTest extends BaseTestClass {
         // test country exists
         Country country = getCountry();
         given(countryRepository.findByNameIgnoreCase(country.getName())).
-                willReturn(Optional.of(CountryEntity.fromCountry(country)));
+                willReturn(Optional.of(mapper.fromCountry(country)));
         Country result = countryService.getCountry(country.getName());
         verify(countryRepository).findByNameIgnoreCase(country.getName());
         assertThat(country).isEqualTo(result);
@@ -67,8 +71,8 @@ class CountryServiceTest extends BaseTestClass {
     void testCreateCountry() {
         // test country does not exists
         Country country = getCountry();
-        given(countryRepository.save(CountryEntity.fromCountry(country))).
-                willReturn(CountryEntity.fromCountry(country));
+        given(countryRepository.save(mapper.fromCountry(country))).
+                willReturn(mapper.fromCountry(country));
         Country result = countryService.createCountry(country);
         verify(countryRepository).save(any(CountryEntity.class));
         assertThat(country).isEqualTo(result);
@@ -76,7 +80,7 @@ class CountryServiceTest extends BaseTestClass {
         // test country exists
         reset(countryRepository);
         given(countryRepository.findByNameIgnoreCase(country.getName()))
-                .willReturn(Optional.of(CountryEntity.fromCountry(country)));
+                .willReturn(Optional.of(mapper.fromCountry(country)));
         assertThatThrownBy(() -> countryService.createCountry(country))
                 .isInstanceOf(RequestException.class)
                 .hasMessageContaining(String.format("the country with name %s is already created", country.getName()));
@@ -87,9 +91,9 @@ class CountryServiceTest extends BaseTestClass {
         // test country exists
         Country country = getCountry();
         given(countryRepository.findByNameIgnoreCase(country.getName()))
-                .willReturn(Optional.of(CountryEntity.fromCountry(country)));
-        given(countryRepository.save(CountryEntity.fromCountry(country))).
-                willReturn(CountryEntity.fromCountry(country));
+                .willReturn(Optional.of(mapper.fromCountry(country)));
+        given(countryRepository.save(mapper.fromCountry(country))).
+                willReturn(mapper.fromCountry(country));
         Country result = countryService.updateCountry(country.getName(), country);
         verify(countryRepository).save(any(CountryEntity.class));
         assertThat(country).isEqualTo(result);

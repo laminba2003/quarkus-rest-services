@@ -2,9 +2,10 @@ package com.quarkus.training.service;
 
 import com.quarkus.training.BaseTestClass;
 import com.quarkus.training.domain.Person;
-import com.quarkus.training.entity.CountryEntity;
 import com.quarkus.training.entity.PersonEntity;
 import com.quarkus.training.exception.EntityNotFoundException;
+import com.quarkus.training.mapping.CountryMapper;
+import com.quarkus.training.mapping.PersonMapper;
 import com.quarkus.training.repository.CountryRepository;
 import com.quarkus.training.repository.PersonRepository;
 import io.quarkus.test.junit.QuarkusTest;
@@ -39,11 +40,17 @@ class PersonServiceTest extends BaseTestClass {
     @Inject
     private PersonService personService;
 
+    @Inject
+    PersonMapper personMapper;
+    
+    @Inject
+    CountryMapper countryMapper;
+    
     @Test
     void testGetPersons() {
         List<Person> persons = Collections.singletonList(getPerson());
         Pageable pageable = PageRequest.of(1, 5);
-        Page<PersonEntity> page = new PageImpl<>(persons.stream().map(PersonEntity::fromPerson).collect(Collectors.toList()), pageable, persons.size());
+        Page<PersonEntity> page = new PageImpl<>(persons.stream().map(personMapper::fromPerson).collect(Collectors.toList()), pageable, persons.size());
         given(personRepository.findAll(pageable)).willReturn(page);
         Page<Person> result = personService.getPersons(pageable);
         verify(personRepository).findAll(pageable);
@@ -54,7 +61,7 @@ class PersonServiceTest extends BaseTestClass {
     void testGetPerson() {
         // test get existing person
         Person person = getPerson();
-        given(personRepository.findById(person.getId())).willReturn(Optional.of(PersonEntity.fromPerson(person)));
+        given(personRepository.findById(person.getId())).willReturn(Optional.of(personMapper.fromPerson(person)));
         Person result = personService.getPerson(person.getId());
         verify(personRepository).findById(person.getId());
         assertThat(result).isEqualTo(person);
@@ -72,8 +79,8 @@ class PersonServiceTest extends BaseTestClass {
         // test create person with existing country
         Person person = getPerson();
         given(countryRepository.findByNameIgnoreCase(anyString()))
-                .willReturn(Optional.of(CountryEntity.fromCountry(person.getCountry())));
-        given(personRepository.save(any())).willReturn(PersonEntity.fromPerson(person));
+                .willReturn(Optional.of(countryMapper.fromCountry(person.getCountry())));
+        given(personRepository.save(any())).willReturn(personMapper.fromPerson(person));
         Person result = personService.createPerson(getPerson());
         verify(countryRepository).findByNameIgnoreCase(anyString());
         verify(personRepository).save(any());
@@ -93,10 +100,10 @@ class PersonServiceTest extends BaseTestClass {
     void testUpdatePerson() {
         // test update person with existing country
         Person person = getPerson();
-        given(personRepository.findById(person.getId())).willReturn(Optional.of(PersonEntity.fromPerson(person)));
+        given(personRepository.findById(person.getId())).willReturn(Optional.of(personMapper.fromPerson(person)));
         given(countryRepository.findByNameIgnoreCase(anyString()))
-                .willReturn(Optional.of(CountryEntity.fromCountry(person.getCountry())));
-        given(personRepository.save(any())).willReturn(PersonEntity.fromPerson(person));
+                .willReturn(Optional.of(countryMapper.fromCountry(person.getCountry())));
+        given(personRepository.save(any())).willReturn(personMapper.fromPerson(person));
         Person result = personService.updatePerson(person.getId(), getPerson());
         verify(countryRepository).findByNameIgnoreCase(anyString());
         verify(personRepository).save(any());

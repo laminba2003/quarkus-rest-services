@@ -37,6 +37,12 @@ package com.quarkus.training.entity {
     class PersonEntity
 }
 
+package com.quarkus.training.mapping {
+    interface CountryMapper
+    interface PersonMapper
+}
+
+
 package com.quarkus.training.repository {
     interface CountryRepository
     interface PersonRepository
@@ -61,9 +67,11 @@ package com.quarkus.training.controller {
     class PersonController
 }
 
-com.quarkus.training.entity ..> com.quarkus.training.domain
+com.quarkus.training.mapping ..> com.quarkus.training.domain
+com.quarkus.training.mapping ..> com.quarkus.training.entity
 com.quarkus.training.repository ..> com.quarkus.training.entity
 com.quarkus.training.service ..> com.quarkus.training.repository
+com.quarkus.training.service ..> com.quarkus.training.mapping
 com.quarkus.training.service ..> com.quarkus.training.exception
 com.quarkus.training.controller ..> com.quarkus.training.service
 
@@ -84,7 +92,6 @@ class CountryEntity <<Entity>> {
   + name: String
   + capital: String
   + population: Integer
-  + Country toCountry()
 }
 
 interface CountryRepository<CountryEntity, String> <<Repository>> {
@@ -100,11 +107,12 @@ class CountryController <<Controller>> {
 }
 
 
-CountryEntity ..> Country
 CountryRepository ..> CountryEntity
 CrudRepository <|-- CountryRepository
 CountryService --> CountryRepository
 CountryController --> CountryService
+CountryController ..> Country
+CountryService ..> Country
 
 ----
 
@@ -192,11 +200,9 @@ class PersonEntity <<Entity>> {
   + String firstName
   + String lastName
   + CountryEntry country
-  + Person toPerson()
 }
 
 class CountryEntity <<Entity>> {
-  + Country toCountry()
 }
 
 
@@ -213,15 +219,14 @@ class PersonController <<Controller>> {
 }
 
 
-PersonEntity ..> Person
 PersonEntity -> CountryEntity
-CountryEntity ..> Country
 Person -> Country
 PersonRepository ..> PersonEntity
 PagingAndSortingRepository <|-- PersonRepository
 PersonService --> PersonRepository
 PersonController --> PersonService
-
+PersonService ..> Person
+PersonController ..> Person
 ----
 
 === GetPersons
