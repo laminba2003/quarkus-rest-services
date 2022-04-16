@@ -5,20 +5,19 @@ import com.quarkus.training.exception.EntityNotFoundException;
 import com.quarkus.training.exception.RequestException;
 import com.quarkus.training.mapping.CountryMapper;
 import com.quarkus.training.repository.CountryRepository;
+import lombok.AllArgsConstructor;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @ApplicationScoped
+@AllArgsConstructor
 public class CountryService {
 
-    @Inject
     CountryRepository countryRepository;
 
-    @Inject
     CountryMapper countryMapper;
 
     public List<Country> getCountries() {

@@ -21,13 +21,9 @@ public class ResponseFilter implements ContainerResponseFilter {
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
         if (responseContext.getStatus() == Status.UNAUTHORIZED.getStatusCode()) {
-            if (log.isDebugEnabled()) {
-                log.debug("access unauthorized for user : {} ", user);
-            }
+            log.debug("access unauthorized for user : {} ", user);
         } else if (responseContext.getStatus() == Status.FORBIDDEN.getStatusCode()) {
-            if (log.isDebugEnabled()) {
-                log.debug("access forbidden for user : {} ", user);
-            }
+            log.debug("access forbidden for user : {} ", user);
         }
     }
 }

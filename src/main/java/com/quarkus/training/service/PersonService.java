@@ -5,21 +5,19 @@ import com.quarkus.training.exception.EntityNotFoundException;
 import com.quarkus.training.mapping.PersonMapper;
 import com.quarkus.training.repository.CountryRepository;
 import com.quarkus.training.repository.PersonRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 @ApplicationScoped
+@AllArgsConstructor
 public class PersonService {
 
-    @Inject
     PersonRepository personRepository;
 
-    @Inject
     CountryRepository countryRepository;
 
-    @Inject
     PersonMapper personMapper;
 
     public Page<Person> getPersons(Pageable pageable) {
