@@ -32,13 +32,13 @@ import static org.mockito.Mockito.verify;
 class PersonServiceTest extends BaseTestClass {
 
     @InjectMock
-    private PersonRepository personRepository;
+    PersonRepository personRepository;
 
     @InjectMock
-    private CountryRepository countryRepository;
+    CountryRepository countryRepository;
 
     @Inject
-    private PersonService personService;
+    PersonService personService;
 
     @Inject
     PersonMapper personMapper;
