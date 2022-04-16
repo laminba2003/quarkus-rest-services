@@ -17,7 +17,7 @@ public class LoggingInterceptor {
     User user;
 
     @AroundInvoke
-    public Object log(InvocationContext ctx) throws Exception {
+    public Object logAround(InvocationContext ctx) throws Exception {
         log.debug("Enter: {}.{}() with argument[s] = {} and user = {}", ctx.getMethod().getReturnType().getName(),
                 ctx.getMethod().getName(), Arrays.toString(ctx.getParameters()), user);
         try {
