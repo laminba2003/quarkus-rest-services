@@ -18,16 +18,12 @@ public class LoggingInterceptor {
 
     @AroundInvoke
     public Object log(InvocationContext ctx) throws Exception {
-        if (log.isDebugEnabled()) {
-            log.debug("Enter: {}.{}() with argument[s] = {} and user = {}", ctx.getMethod().getReturnType().getName(),
-                    ctx.getMethod().getName(), Arrays.toString(ctx.getParameters()), user);
-        }
+        log.debug("Enter: {}.{}() with argument[s] = {} and user = {}", ctx.getMethod().getReturnType().getName(),
+                ctx.getMethod().getName(), Arrays.toString(ctx.getParameters()), user);
         try {
             Object result = ctx.proceed();
-            if (log.isDebugEnabled()) {
-                log.debug("Exit: {}.{}() with result = {}", ctx.getMethod().getReturnType().getName(),
-                        ctx.getMethod().getName(), result);
-            }
+            log.debug("Exit: {}.{}() with result = {}", ctx.getMethod().getReturnType().getName(),
+                    ctx.getMethod().getName(), result);
             return result;
         } catch (IllegalArgumentException e) {
             log.error("Illegal argument: {} in {}.{}()", Arrays.toString(ctx.getParameters()),
