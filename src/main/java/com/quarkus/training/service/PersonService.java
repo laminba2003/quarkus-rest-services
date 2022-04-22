@@ -1,5 +1,6 @@
 package com.quarkus.training.service;
 
+import com.quarkus.training.config.MessageSource;
 import com.quarkus.training.domain.Person;
 import com.quarkus.training.exception.EntityNotFoundException;
 import com.quarkus.training.mapping.PersonMapper;
@@ -20,18 +21,20 @@ public class PersonService {
 
     PersonMapper personMapper;
 
+    MessageSource messageSource;
+
     public Page<Person> getPersons(Pageable pageable) {
         return personRepository.findAll(pageable).map(personMapper::toPerson);
     }
 
     public Person getPerson(Long id) {
         return personMapper.toPerson(personRepository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException(String.format("person not found with id = %d", id))));
+                new EntityNotFoundException(messageSource.getMessage("person.notfound", id))));
     }
 
     public Person createPerson(Person person) {
         countryRepository.findByNameIgnoreCase(person.getCountry().getName()).orElseThrow(() ->
-                new EntityNotFoundException(String.format("country not found with name = %s", person.getCountry().getName())));
+                new EntityNotFoundException(messageSource.getMessage("country.notfound", person.getCountry().getName())));
         person.setId(null);
         return personMapper.toPerson(personRepository.save(personMapper.fromPerson(person)));
     }
@@ -40,10 +43,10 @@ public class PersonService {
         return personRepository.findById(id)
                 .map(entity -> {
                     countryRepository.findByNameIgnoreCase(person.getCountry().getName()).orElseThrow(() ->
-                            new EntityNotFoundException(String.format("country not found with name = %s", person.getCountry().getName())));
+                            new EntityNotFoundException(messageSource.getMessage("country.notfound", person.getCountry().getName())));
                     person.setId(id);
                     return personMapper.toPerson(personRepository.save(personMapper.fromPerson(person)));
-                }).orElseThrow(() -> new EntityNotFoundException(String.format("person not found with id = %d", id)));
+                }).orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("person.notfound", id)));
     }
 
     public void deletePerson(Long id) {
