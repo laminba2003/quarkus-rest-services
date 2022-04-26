@@ -3,6 +3,7 @@ package com.quarkus.training.service;
 import com.quarkus.training.config.MessageSource;
 import com.quarkus.training.domain.Person;
 import com.quarkus.training.exception.EntityNotFoundException;
+import com.quarkus.training.exception.RequestException;
 import com.quarkus.training.mapping.PersonMapper;
 import com.quarkus.training.repository.CountryRepository;
 import com.quarkus.training.repository.PersonRepository;
@@ -10,6 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import javax.enterprise.context.ApplicationScoped;
+import javax.transaction.Transactional;
+import javax.ws.rs.core.Response;
 
 @ApplicationScoped
 @AllArgsConstructor
@@ -32,6 +35,7 @@ public class PersonService {
                 new EntityNotFoundException(messageSource.getMessage("person.notfound", id))));
     }
 
+    @Transactional
     public Person createPerson(Person person) {
         countryRepository.findByNameIgnoreCase(person.getCountry().getName()).orElseThrow(() ->
                 new EntityNotFoundException(messageSource.getMessage("country.notfound", person.getCountry().getName())));
@@ -39,6 +43,7 @@ public class PersonService {
         return personMapper.toPerson(personRepository.save(personMapper.fromPerson(person)));
     }
 
+    @Transactional
     public Person updatePerson(Long id, Person person) {
         return personRepository.findById(id)
                 .map(entity -> {
@@ -49,9 +54,13 @@ public class PersonService {
                 }).orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("person.notfound", id)));
     }
 
+    @Transactional
     public void deletePerson(Long id) {
-        if(personRepository.existsById(id)) {
+        try {
             personRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RequestException(messageSource.getMessage("person.errordeletion", id),
+                    Response.Status.CONFLICT);
         }
     }
 

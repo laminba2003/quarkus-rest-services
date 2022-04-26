@@ -110,15 +110,11 @@ class CountryServiceTest extends BaseTestClass {
     void testDeleteCountry() {
         // test country can be deleted
         String name = getCountry().getName();
-        given(countryRepository.existsById(name)).
-                willReturn(true);
         countryService.deleteCountry(name);
         verify(countryRepository).deleteById(name);
 
         // test country cannot be deleted
         reset(countryRepository);
-        given(countryRepository.existsById(name)).
-                willReturn(true);
         doThrow(RuntimeException.class).when(countryRepository).deleteById(name);
         assertThatThrownBy(() -> countryService.deleteCountry(name))
                 .isInstanceOf(RequestException.class)
