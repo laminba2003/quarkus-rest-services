@@ -17,6 +17,7 @@
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
     <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
     <lombok.version>1.18.22</lombok.version>
+    <jacoco.version>0.8.5</jacoco.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -156,6 +157,11 @@
       <groupId>org.mapstruct</groupId>
       <artifactId>mapstruct</artifactId>
       <version>${org.mapstruct.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jacoco</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>

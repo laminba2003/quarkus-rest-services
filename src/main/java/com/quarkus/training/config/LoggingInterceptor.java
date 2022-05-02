@@ -25,9 +25,9 @@ public class LoggingInterceptor {
             log.debug("Exit: {}.{}() with result = {}", ctx.getMethod().getReturnType().getName(),
                     ctx.getMethod().getName(), result);
             return result;
-        } catch (IllegalArgumentException e) {
-            log.error("Illegal argument: {} in {}.{}()", Arrays.toString(ctx.getParameters()),
-                    ctx.getMethod().getReturnType().getName(), ctx.getMethod().getName());
+        } catch (Exception e) {
+            log.error("Exception in {}.{}() with message = {}", ctx.getMethod().getReturnType().getName(),
+                    ctx.getMethod().getName(), e.getMessage());
             throw e;
         }
     }

@@ -86,7 +86,7 @@ class CountryServiceTest extends BaseTestClass {
                 .hasMessageContaining(String.format("the country with name %s is already created", country.getName()));
     }
 
-
+    @Test
     void testUpdateCountry() {
         // test country exists
         Country country = getCountry();
@@ -106,7 +106,7 @@ class CountryServiceTest extends BaseTestClass {
 
     }
 
-
+    @Test
     void testDeleteCountry() {
         // test country can be deleted
         String name = getCountry().getName();
